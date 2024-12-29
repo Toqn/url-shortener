@@ -1,9 +1,8 @@
 package controllers
 
 import (
-	"crypto/sha256"
-	"encoding/base64"
 	"fmt"
+	"github.com/Toqn/url-shortener/internal/url"
 	"html/template"
 	"net/http"
 	"strings"
@@ -63,7 +62,7 @@ func NewService() *Service {
 
 func (s *Service) Shorten(originalURL string) error {
 	originalURL = strings.TrimSpace(originalURL)
-	hashed := hashURL(originalURL)
+	hashed := url.ShortenUrl(originalURL)
 	shortenedURL := fmt.Sprintf(
 		"%s/%s",
 		"cust.om",
@@ -72,10 +71,4 @@ func (s *Service) Shorten(originalURL string) error {
 
 	s.mapping[originalURL] = shortenedURL
 	return nil
-}
-
-func hashURL(url string) string {
-	hasher := sha256.New()
-	hasher.Write([]byte(url))
-	return base64.URLEncoding.EncodeToString(hasher.Sum(nil))[:8] // Use first 8 characters
 }
