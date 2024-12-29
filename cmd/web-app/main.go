@@ -1,30 +1,16 @@
 package main
 
 import (
-	"html/template"
+	"github.com/Toqn/url-shortener/internal/controllers"
 	"log"
 	"net/http"
 )
 
 func main() {
-	http.HandleFunc("/", ShowHomPage)
+	http.HandleFunc("/", controllers.ShowIndex)
+	http.HandleFunc("/shorten", controllers.ShowShorten)
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		log.Fatalf("error: %s", err)
 	}
-}
-
-func ShowHomPage(w http.ResponseWriter, _ *http.Request) {
-	tmpl, err := template.ParseFiles("internal/template/index.html")
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	err = tmpl.Execute(w, nil)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
 }
